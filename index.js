@@ -1,8 +1,6 @@
 const inquirer = require("inquirer");
 const util = require("util");
 const db = require("./db/index");
-//query will be used to query database
-// const query = util.promisify(db.query).bind(db)
 async function init() {
   const answers = await inquirer.prompt([
     {
@@ -48,7 +46,7 @@ async function init() {
       break;
 
     default:
-      console.log("log on line 42 opps");
+      console.log("opps");
       break;
   }
   async function viewAllDepartments() {
@@ -64,33 +62,107 @@ async function init() {
     console.table(employeeInfo[0]);
   }
   async function addDepartment() {
-    const department = await inquirer.prompt([{
-      type: "input",
-      name: "name",
-      message: "Enter name of the new department"
-    }])
+    const department = await inquirer.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "Enter name of the new department",
+      },
+    ]);
 
     const newDepartment = await db.createDepartment(department.name);
     console.log(`Created ${department.name} department`);
     const departmentData = await db.findAllDepartments();
     console.table(departmentData[0]);
   }
-  function addRole(params) {
+  async function addRole() {
+    const role = await inquirer.prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "Enter the title of new role",
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Enter the salary of the new role",
+      },
+      {
+        type: "input",
+        name: "department_id",
+        message: "What is the department id of the new role",
+      },
+    ]);
+    const newRole = await db.createRole(
+      role.title,
+      role.salary,
+      role.department_id
+    );
+
     console.log("addRole");
+    const roleData = await db.findAllRoles();
+    console.table(roleData[0]);
   }
-  function addEmployee(params) {
+  async function addEmployee() {
+  const employee = await inquirer.prompt([
+    {
+      type: "input",
+      name: "first_name",
+      message: "What is the first name of the employee",
+    },
+    {
+      type: "input",
+      name: "last_name",
+      message: "What is the last name of the employee",
+    },
+    {
+      type: "input",
+      name: "role_id",
+      message: "What is the role id of the employee",
+    },
+    {
+      type: "input",
+      name: "manager_id",
+      message: "What is the manager id of the employee",
+    }
+
+  ])
+  const newEmployee = await db.createEmployee(
+    employee.first_name,
+    employee.last_name,
+    employee.role_id,
+    employee.manager_id
+  )
+  const employeeData = await db.findAllEmployees();
+  console.table(employeeData[0]);
     console.log("addEmployee");
   }
-  function updateEmployeeRole(params) {
+  async function updateEmployeeRole() {
+    const employeeUpdate = await inquirer.prompt([
+      {
+        type: "input",
+      name: "employee_id",
+      message: "What is the employee id",
+      },
+      {
+        type: "input",
+      name: "role_id",
+      message: "What is the role id of the new employee role",
+      },
+    ])
+    const newUpdate = await db.updateEmployee(
+      employeeUpdate.employee_id,
+      employeeUpdate.role_id
+    )
     console.log("updateEmployeeRole");
+    const employeeData = await db.findAllEmployees();
+  console.table(employeeData[0]);
   }
-  function quit(params) {
+  async function quit() {
     console.log("quit");
+    process.exit(1)
   }
-  //add switch statment or if statement that runs a function based of user choice
 
-  // const answers = await query("SELECT * FROM department")
-  // console.table(demo);
 }
 
 init();

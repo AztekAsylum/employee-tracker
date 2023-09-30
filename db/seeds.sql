@@ -12,6 +12,6 @@ VALUES ("Photographer", 80000, 1),
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Josh", "Rodriguez", 1, NULL),
-       ("Santi", "Lopez", 2, 1),
-       ("Estevan", "Oriel", 3, 2),
+       ("Santi", "Jaramillo", 2, 1),
+       ("Estevan", "Oriol", 3, 2),
        ("Frank", "Perez", 4, 3);

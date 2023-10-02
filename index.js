@@ -52,21 +52,27 @@ async function init() {
   async function viewAllDepartments() {
     const departmentData = await db.findAllDepartments();
     console.table(departmentData[0]);
+    console.log("\n");
+    init();
   }
   async function viewAllRoles() {
     const roleInfo = await db.findAllRoles();
     console.table(roleInfo[0]);
+    console.log("\n");
+    init();
   }
   async function viewAllEmployees() {
     const employeeInfo = await db.findAllEmployees();
     console.table(employeeInfo[0]);
+    console.log("\n");
+    init();
   }
   async function addDepartment() {
     const department = await inquirer.prompt([
       {
         type: "input",
         name: "name",
-        message: "Enter name of the new department",
+        message: "Enter name of the new department.",
       },
     ]);
 
@@ -74,23 +80,25 @@ async function init() {
     console.log(`Created ${department.name} department`);
     const departmentData = await db.findAllDepartments();
     console.table(departmentData[0]);
+    console.log("\n");
+    init();
   }
   async function addRole() {
     const role = await inquirer.prompt([
       {
         type: "input",
         name: "title",
-        message: "Enter the title of new role",
+        message: "Enter the title of new role.",
       },
       {
         type: "input",
         name: "salary",
-        message: "Enter the salary of the new role",
+        message: "Enter the salary of the new role.",
       },
       {
         type: "input",
         name: "department_id",
-        message: "What is the department id of the new role",
+        message: "What is the department id of the new role?",
       },
     ]);
     const newRole = await db.createRole(
@@ -102,67 +110,71 @@ async function init() {
     console.log("addRole");
     const roleData = await db.findAllRoles();
     console.table(roleData[0]);
+    console.log("\n");
+    init();
   }
   async function addEmployee() {
-  const employee = await inquirer.prompt([
-    {
-      type: "input",
-      name: "first_name",
-      message: "What is the first name of the employee",
-    },
-    {
-      type: "input",
-      name: "last_name",
-      message: "What is the last name of the employee",
-    },
-    {
-      type: "input",
-      name: "role_id",
-      message: "What is the role id of the employee",
-    },
-    {
-      type: "input",
-      name: "manager_id",
-      message: "What is the manager id of the employee",
-    }
-
-  ])
-  const newEmployee = await db.createEmployee(
-    employee.first_name,
-    employee.last_name,
-    employee.role_id,
-    employee.manager_id
-  )
-  const employeeData = await db.findAllEmployees();
-  console.table(employeeData[0]);
+    const employee = await inquirer.prompt([
+      {
+        type: "input",
+        name: "first_name",
+        message: "What is the first name of the employee?",
+      },
+      {
+        type: "input",
+        name: "last_name",
+        message: "What is the last name of the employee?",
+      },
+      {
+        type: "input",
+        name: "role_id",
+        message: "What is the role id of the employee?",
+      },
+      {
+        type: "input",
+        name: "manager_id",
+        message: "What is the manager id of the employee?",
+      },
+    ]);
+    const newEmployee = await db.createEmployee(
+      employee.first_name,
+      employee.last_name,
+      employee.role_id,
+      employee.manager_id
+    );
+    const employeeData = await db.findAllEmployees();
+    console.table(employeeData[0]);
     console.log("addEmployee");
+    console.log("\n");
+    init();
   }
   async function updateEmployeeRole() {
     const employeeUpdate = await inquirer.prompt([
       {
         type: "input",
-      name: "employee_id",
-      message: "What is the employee id",
+        name: "employee_id",
+        message: "What is the employee id?",
       },
       {
         type: "input",
-      name: "role_id",
-      message: "What is the role id of the new employee role",
+        name: "role_id",
+        message: "What is the role id of the new employee role?",
       },
-    ])
+    ]);
     const newUpdate = await db.updateEmployee(
       employeeUpdate.employee_id,
       employeeUpdate.role_id
-    )
+    );
     console.log("updateEmployeeRole");
     const employeeData = await db.findAllEmployees();
-  console.table(employeeData[0]);
+    console.table(employeeData[0]);
+    console.log("\n");
+    init();
   }
   async function quit() {
     console.log("quit");
-    process.exit(1)
+    process.exit(1);
   }
-
 }
 
 init();

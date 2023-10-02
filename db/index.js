@@ -46,7 +46,7 @@ class DB {
       .promise()
       .query(
         "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)",
-        [first_name, last_name, role_id, manager_id]
+        [first_name, last_name, parseInt(role_id), parseInt(manager_id)]
       );
   }
 

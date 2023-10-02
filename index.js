@@ -84,6 +84,11 @@ async function init() {
     init();
   }
   async function addRole() {
+    const aviableDepartments = await db.findAllDepartments();
+    const parseDepartments = await aviableDepartments[0].map((e) => {
+      return e.department;
+    });
+
     const role = await inquirer.prompt([
       {
         type: "input",
@@ -96,16 +101,16 @@ async function init() {
         message: "Enter the salary of the new role.",
       },
       {
-        type: "input",
+        type: "list",
         name: "department_id",
         message: "What is the department id of the new role?",
+        choices: parseDepartments,
       },
     ]);
-    const newRole = await db.createRole(
-      role.title,
-      role.salary,
-      role.department_id
-    );
+    const departmentId = await aviableDepartments[0].find((e) => {
+      return role.department_id === e.department;
+    }).id;
+    const newRole = await db.createRole(role.title, role.salary, departmentId);
 
     console.log("addRole");
     const roleData = await db.findAllRoles();
@@ -114,6 +119,15 @@ async function init() {
     init();
   }
   async function addEmployee() {
+    const aviableRoles = await db.findAllRoles();
+    const parseRoles = await aviableRoles[0].map((e) => {
+      return e.title;
+    });
+    const aviableManagers = await db.findAllEmployees();
+    const parseManagers = await aviableManagers[0].map((e) => {
+      return `${e.first_name} ${e.last_name}`;
+    });
+    // console.log(parseRoles);
     const employee = await inquirer.prompt([
       {
         type: "input",
@@ -126,21 +140,31 @@ async function init() {
         message: "What is the last name of the employee?",
       },
       {
-        type: "input",
+        type: "list",
         name: "role_id",
         message: "What is the role id of the employee?",
+        choices: parseRoles,
       },
       {
-        type: "input",
+        type: "list",
         name: "manager_id",
         message: "What is the manager id of the employee?",
+        choices: parseManagers,
       },
     ]);
+    const roleId = await aviableRoles[0].find((e) => {
+      return employee.role_id === e.title;
+    }).id;
+
+    const managerId = await aviableManagers[0].find((e) => {
+      return employee.manager_id === `${e.first_name} ${e.last_name}`;
+    }).id;
+
     const newEmployee = await db.createEmployee(
       employee.first_name,
       employee.last_name,
-      employee.role_id,
-      employee.manager_id
+      roleId,
+      managerId
     );
     const employeeData = await db.findAllEmployees();
     console.table(employeeData[0]);
@@ -149,22 +173,37 @@ async function init() {
     init();
   }
   async function updateEmployeeRole() {
+    const aviableRoles = await db.findAllRoles();
+    const parseRoles = await aviableRoles[0].map((e) => {
+      return e.title;
+    });
+    const aviableEmpolyees = await db.findAllEmployees();
+    const parseEmployees = await aviableEmpolyees[0].map((e) => {
+      return `${e.first_name} ${e.last_name}`;
+    });
     const employeeUpdate = await inquirer.prompt([
       {
-        type: "input",
+        type: "list",
         name: "employee_id",
-        message: "What is the employee id?",
+        message: "What employee would you like to update?",
+        choices: parseEmployees,
       },
       {
-        type: "input",
+        type: "list",
         name: "role_id",
-        message: "What is the role id of the new employee role?",
+        message: "What is the role of the new employee role?",
+        choices: parseRoles,
       },
     ]);
-    const newUpdate = await db.updateEmployee(
-      employeeUpdate.employee_id,
-      employeeUpdate.role_id
-    );
+    const roleId = await aviableRoles[0].find((e) => {
+      return employeeUpdate.role_id === e.title;
+    }).id;
+
+    const employeeId = await aviableEmpolyees[0].find((e) => {
+      return employeeUpdate.employee_id === `${e.first_name} ${e.last_name}`;
+    }).id;
+
+    const newUpdate = await db.updateEmployee(employeeId, roleId);
     console.log("updateEmployeeRole");
     const employeeData = await db.findAllEmployees();
     console.table(employeeData[0]);

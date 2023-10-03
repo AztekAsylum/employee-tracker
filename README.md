@@ -23,6 +23,10 @@ If you want to install locally; clone the repo, run `npm i`, make sure you have 
 
 Organize your employees.
 
+## Walkthrough Video
+
+[Click here for a walk through video](https://drive.google.com/file/d/1WKgB0hMgkTfwa6Os3NMtJax06N4cHh7Q/view)
+
 ## Contribution
 
 Email me if you would like to contribute.
